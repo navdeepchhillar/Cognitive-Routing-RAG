@@ -1,0 +1,18 @@
+# Grid07 AI Assignment — Python dependencies
+# Install with: pip install -r requirements.txt
+
+# ── Core LLM / LangChain stack ──────────────────────────────────────────────
+langchain>=0.2.0
+langchain-core>=0.2.0
+langchain-groq>=0.1.6          # swap for langchain-openai or langchain-ollama
+langgraph>=0.1.0
+
+# ── Embeddings ────────────────────────────────────────────────────────────────
+sentence-transformers>=2.7.0   # all-MiniLM-L6-v2 for persona embeddings
+
+# ── Vector store ──────────────────────────────────────────────────────────────
+faiss-cpu>=1.8.0               # pure-CPU FAISS; use faiss-gpu on CUDA machines
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+numpy>=1.26.0
+python-dotenv>=1.0.0           # loads .env file automatically
