@@ -12,10 +12,6 @@ Embedding model: **all-MiniLM-L6-v2** (sentence-transformers).
 [Phase 1] Loading embedding model (all-MiniLM-L6-v2)…
 [Phase 1] FAISS index built — 3 persona vectors stored.
 
-=================================================================
-  PHASE 1 — VECTOR-BASED PERSONA ROUTING
-=================================================================
-
 Post: "OpenAI just released a new model that might replace junior developers."
   ✓  bot_a (Tech Maximalist)  sim=0.5312
   ✓  bot_b (Doomer / Skeptic) sim=0.4101
