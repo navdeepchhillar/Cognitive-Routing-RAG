@@ -17,18 +17,12 @@ from langchain_groq import ChatGroq          # swap for ChatOpenAI if preferred
 from langgraph.graph import StateGraph, END
 from langgraph.graph.message import add_messages
 
-# ---------------------------------------------------------------------------
-# LLM setup  (reads GROQ_API_KEY from env; swap for OpenAI or Ollama easily)
-# ---------------------------------------------------------------------------
 llm = ChatGroq(
     model="llama3-8b-8192",
     temperature=0.7,
     api_key=os.getenv("GROQ_API_KEY"),
 )
 
-# ---------------------------------------------------------------------------
-# Mock SearXNG search tool
-# ---------------------------------------------------------------------------
 MOCK_NEWS_DB = {
     "crypto":       "Bitcoin hits new all-time high amid regulatory ETF approvals; Ethereum layer-2 volume surges 300%.",
     "bitcoin":      "Bitcoin crosses $100k as BlackRock files for spot BTC ETF expansion.",
@@ -54,9 +48,6 @@ def mock_searxng_search(query: str) -> str:
     return "[SEARCH RESULT] No specific results found. General tech and finance markets remain volatile."
 
 
-# ---------------------------------------------------------------------------
-# LangGraph state
-# ---------------------------------------------------------------------------
 class AgentState(TypedDict):
     bot_id: str
     persona: str
@@ -67,9 +58,6 @@ class AgentState(TypedDict):
     final_post: dict   # {"bot_id": ..., "topic": ..., "post_content": ...}
 
 
-# ---------------------------------------------------------------------------
-# Node 1 — Decide Search
-# ---------------------------------------------------------------------------
 def node_decide_search(state: AgentState) -> AgentState:
     """LLM decides what to search based on the bot's persona."""
     system = SystemMessage(content=(
@@ -85,9 +73,6 @@ def node_decide_search(state: AgentState) -> AgentState:
     return {**state, "search_query": query, "messages": [system, human, response]}
 
 
-# ---------------------------------------------------------------------------
-# Node 2 — Web Search
-# ---------------------------------------------------------------------------
 def node_web_search(state: AgentState) -> AgentState:
     """Executes the mock search tool."""
     result = mock_searxng_search.invoke({"query": state["search_query"]})
@@ -95,9 +80,6 @@ def node_web_search(state: AgentState) -> AgentState:
     return {**state, "search_result": result}
 
 
-# ---------------------------------------------------------------------------
-# Node 3 — Draft Post
-# ---------------------------------------------------------------------------
 _JSON_SCHEMA = '{"bot_id": "<string>", "topic": "<string>", "post_content": "<string max 280 chars>"}'
 
 def node_draft_post(state: AgentState) -> AgentState:
@@ -137,9 +119,6 @@ def node_draft_post(state: AgentState) -> AgentState:
     return {**state, "final_post": post_obj}
 
 
-# ---------------------------------------------------------------------------
-# Build the graph
-# ---------------------------------------------------------------------------
 def build_content_graph() -> StateGraph:
     g = StateGraph(AgentState)
     g.add_node("decide_search", node_decide_search)
@@ -153,9 +132,6 @@ def build_content_graph() -> StateGraph:
     return g.compile()
 
 
-# ---------------------------------------------------------------------------
-# Public helper
-# ---------------------------------------------------------------------------
 def generate_bot_post(bot_id: str, persona: str) -> dict:
     """Run the full LangGraph pipeline for a single bot and return the JSON post."""
     graph = build_content_graph()
@@ -171,9 +147,6 @@ def generate_bot_post(bot_id: str, persona: str) -> dict:
     return final_state["final_post"]
 
 
-# ---------------------------------------------------------------------------
-# Demo
-# ---------------------------------------------------------------------------
 if __name__ == "__main__":
     from phase1_router import BOT_PERSONAS
 

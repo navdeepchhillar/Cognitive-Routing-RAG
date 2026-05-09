@@ -10,9 +10,6 @@ from sentence_transformers import SentenceTransformer
 import faiss
 from typing import List, Tuple
 
-# ---------------------------------------------------------------------------
-# Bot persona definitions
-# ---------------------------------------------------------------------------
 BOT_PERSONAS = {
     "bot_a": {
         "name": "Tech Maximalist",
@@ -37,9 +34,6 @@ BOT_PERSONAS = {
     },
 }
 
-# ---------------------------------------------------------------------------
-# Build the vector store at module load time
-# ---------------------------------------------------------------------------
 print("[Phase 1] Loading embedding model (all-MiniLM-L6-v2)…")
 _model = SentenceTransformer("all-MiniLM-L6-v2")
 
@@ -58,9 +52,6 @@ _index.add(_persona_embeddings.astype("float32"))
 print(f"[Phase 1] FAISS index built — {_index.ntotal} persona vectors stored.\n")
 
 
-# ---------------------------------------------------------------------------
-# Public routing function
-# ---------------------------------------------------------------------------
 def route_post_to_bots(
     post_content: str,
     threshold: float = 0.30,   # lowered for all-MiniLM-L6-v2 (typical range 0.20-0.60)
@@ -90,10 +81,6 @@ def route_post_to_bots(
     results.sort(key=lambda x: x[2], reverse=True)
     return results
 
-
-# ---------------------------------------------------------------------------
-# Demo / smoke-test
-# ---------------------------------------------------------------------------
 if __name__ == "__main__":
     test_posts = [
         "OpenAI just released a new model that might replace junior developers.",

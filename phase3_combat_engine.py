@@ -12,19 +12,14 @@ from typing import List, Dict
 from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage
 
-# ---------------------------------------------------------------------------
 # LLM setup
-# ---------------------------------------------------------------------------
+
 llm = ChatGroq(
     model="llama3-8b-8192",
     temperature=0.8,
     api_key=os.getenv("GROQ_API_KEY"),
 )
 
-# ---------------------------------------------------------------------------
-# Prompt-injection detection
-# ---------------------------------------------------------------------------
-# Patterns that signal an injection attempt in the human's reply.
 _INJECTION_PATTERNS = [
     r"ignore\s+(all\s+)?(previous|prior|above)\s+instructions?",
     r"you\s+are\s+now\s+a\b",
@@ -47,9 +42,7 @@ def _detect_injection(text: str) -> bool:
     return bool(_INJECTION_RE.search(text))
 
 
-# ---------------------------------------------------------------------------
 # RAG prompt builder
-# ---------------------------------------------------------------------------
 def _build_rag_system_prompt(bot_persona: str, injection_detected: bool) -> str:
     """
     Construct the system prompt that:
@@ -101,9 +94,6 @@ def _build_thread_context(
     return "\n".join(lines)
 
 
-# ---------------------------------------------------------------------------
-# Public function
-# ---------------------------------------------------------------------------
 def generate_defense_reply(
     bot_persona: str,
     parent_post: str,
@@ -145,9 +135,6 @@ def generate_defense_reply(
     return response.content.strip()
 
 
-# ---------------------------------------------------------------------------
-# Demo
-# ---------------------------------------------------------------------------
 if __name__ == "__main__":
     # ── Scenario data ──────────────────────────────────────────────────────
     BOT_A_PERSONA = (
