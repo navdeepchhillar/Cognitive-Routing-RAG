@@ -8,8 +8,8 @@
 
 ```bash
 # 1. Clone and enter the repo
-git clone https://github.com/<your-username>/grid07-ai-assignment.git
-cd grid07-ai-assignment
+git clone https://github.com/navdeepchhillar/Cognitive-Routing-RAG
+cd Cognitive-Routing-RAG
 
 # 2. Create a virtual environment
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
