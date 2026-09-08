@@ -1,4 +1,4 @@
-# Grid07 — AI Cognitive Routing & RAG Assignment
+# AI Cognitive Routing & RAG
 
 > **Stack:** Python 3.11 · LangChain / LangGraph · FAISS · sentence-transformers · Groq (Llama-3 8B)
 
